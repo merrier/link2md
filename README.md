@@ -16,26 +16,53 @@
 
 ## 安装
 
-建议使用项目内虚拟环境：
+从 PyPI 安装：
 
 ```bash
-cd /Users/merrier/repos/link2md
+python3 -m pip install link2md
+```
+
+如果需要浏览器录音 fallback，一并安装浏览器扩展依赖：
+
+```bash
+python3 -m pip install 'link2md[browser]'
+python3 -m playwright install chromium
+```
+
+安装后确认命令可用：
+
+```bash
+link2md --help
+```
+
+也可以直接从 GitHub 安装最新版：
+
+```bash
+python3 -m pip install 'git+https://github.com/merrier/link2md.git'
+```
+
+## 本地开发安装
+
+克隆仓库后建议使用项目内虚拟环境：
+
+```bash
+git clone https://github.com/merrier/link2md.git
+cd link2md
 python3 -m venv .venv
 .venv/bin/python -m pip install --upgrade pip setuptools wheel
-.venv/bin/python -m pip install -e .
+.venv/bin/python -m pip install -e '.[browser]'
 ```
 
 如果使用 fish shell，激活虚拟环境要用 fish 版本脚本：
 
 ```fish
-cd /Users/merrier/repos/link2md
 source .venv/bin/activate.fish
 ```
 
 也可以不激活环境，直接调用：
 
 ```bash
-/Users/merrier/repos/link2md/.venv/bin/link2md --help
+.venv/bin/link2md --help
 ```
 
 ## 基础使用
@@ -170,6 +197,47 @@ python3 -m unittest discover -s tests
 ```
 
 当前测试不会真实访问平台，真实分享链接样本只用于 URL 提取和平台识别回归。
+
+## 发布到 PyPI
+
+发布前先确认版本号，修改 [pyproject.toml](pyproject.toml) 和 [setup.py](setup.py) 里的 `version`。
+
+安装发布工具：
+
+```bash
+python3 -m pip install --upgrade build twine
+```
+
+清理旧产物并构建：
+
+```bash
+rm -rf dist/ build/ *.egg-info/
+python3 -m build
+```
+
+检查包元数据：
+
+```bash
+python3 -m twine check dist/*
+```
+
+先发布到 TestPyPI 验证：
+
+```bash
+python3 -m twine upload --repository testpypi dist/*
+```
+
+正式发布：
+
+```bash
+python3 -m twine upload dist/*
+```
+
+发布成功后，其他用户即可通过下面的命令安装：
+
+```bash
+python3 -m pip install link2md
+```
 
 ## 说明
 
