@@ -198,49 +198,6 @@ python3 -m unittest discover -s tests
 
 当前测试不会真实访问平台，真实分享链接样本只用于 URL 提取和平台识别回归。
 
-## 发布到 PyPI
-
-仓库内置 GitHub Actions 发布流程：[`.github/workflows/publish-to-pypi.yml`](.github/workflows/publish-to-pypi.yml)。
-
-发布流程使用 PyPI Trusted Publishing，不需要在 GitHub Secrets 里保存 PyPI token。你需要先在 PyPI 和 TestPyPI 后台创建 Trusted Publisher：
-
-- PyPI project name: `link2md`
-- Owner: `merrier`
-- Repository: `link2md`
-- Workflow filename: `publish-to-pypi.yml`
-- PyPI environment name: `pypi`
-- TestPyPI environment name: `testpypi`
-
-Workflow 行为：
-
-- 推送到 `main`：构建包，检查元数据，并发布到 TestPyPI。
-- 手动触发 `workflow_dispatch`：构建包，检查元数据，并发布到 TestPyPI。
-- 推送 `v*` tag：构建包，检查元数据，并发布到 PyPI。
-
-发布前先确认版本号，修改 [pyproject.toml](pyproject.toml) 和 [setup.py](setup.py) 里的 `version`。PyPI 版本号不可重复。
-
-本地预检查：
-
-```bash
-python3 -m pip install --upgrade build twine
-rm -rf dist/ build/ *.egg-info/
-python3 -m build
-python3 -m twine check dist/*
-```
-
-发布正式版本：
-
-```bash
-git tag v0.1.0
-git push origin v0.1.0
-```
-
-发布成功后，其他用户即可通过下面的命令安装：
-
-```bash
-python3 -m pip install link2md
-```
-
 ## 说明
 
 这个工具不是反风控抓取器。小红书、抖音、B 站页面结构和访问策略会变化，部分内容可能需要登录、Cookie 或人工验证。工具会尽量输出可用 Markdown，并在失败时保留清晰的错误说明。
