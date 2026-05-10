@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=58"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "link2md"
+version = "0.1.0"
+description = "Convert Xiaohongshu, Bilibili, and Douyin links into Markdown notes."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "merrier" }]
+
+[project.scripts]
+link2md = "link2md:main"
+
+[project.optional-dependencies]
+browser = ["playwright>=1.40"]
+
+[tool.setuptools]
+py-modules = ["link2md"]
